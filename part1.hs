@@ -11,11 +11,12 @@ perfectos p = [x | x <- [1..p], sumaDivisores x == x]
 ----------------------------------------------------------
 
 juntar :: (Ord a) => [a]->[a]->[a]
+juntar [][]=[]
 juntar [] ys =ys
 juntar xs [] = xs
-juntar (x:xs) (y:ys) = if x <= y 
-      then x : juntar xs (y:ys)
-      else  y : juntar (x:xs) ys
+juntar a@(x:xs) b@(y:ys) = if x <= y 
+      then x : juntar xs b
+      else  y : juntar a ys
 
 particion :: Ord a => a ->[a]->([a],[a])
 particion _ [] = ([],[])
@@ -57,5 +58,24 @@ inserta a (x:xs) = if a < x then a:x:xs else x:inserta a xs
 split::[a]->([a],[a])
 split [] = ([],[])
 split [x] = ([x],[])
-split (x:y:zs) = (x:l1,xs:l2)
+split (x:y:zs) = (x:l1,y:l2)
     where (l1,l2) = split zs
+
+merge :: (Ord a) => [a]->[a]->[a]
+merge [][]=[]
+merge [] ys =ys
+merge xs [] = xs
+merge a@(x:xs) b@(y:ys) = if x <= y 
+      then x : merge xs b
+      else  y : merge a ys
+
+-- Implementación de Merge Sort
+msort :: (Ord a) => [a] -> [a]
+msort [] = []
+msort [x] = [x]
+msort x = let
+              (i, j) = split x
+              i' = msort i
+              j' = msort j
+          in 
+              merge i' j'    
