@@ -1,31 +1,35 @@
--- con listas no ordenadas
 module Set (Set, emptySet, setEmpty, inSet, addSet, delSet, unionSet) where
 
--- Definimos el tipo de dato Set como una lista
 newtype Set a = Set [a] deriving (Show, Eq)
 
--- Crea un conjunto vacío
+-- Conjunto vacío
 emptySet :: Set a
 emptySet = Set []
 
 -- Verifica si un conjunto está vacío
 setEmpty :: Set a -> Bool
-setEmpty (Set xs) = null xs
+setEmpty (Set []) = True
+setEmpty _ = False
 
 -- Verifica si un elemento está en el conjunto
 inSet :: (Eq a) => a -> Set a -> Bool
-inSet x (Set xs) = x `elem` xs
+inSet _ (Set []) = False
+inSet x (Set (y:ys)) = x == y || inSet x (Set ys)
 
--- Agrega un elemento al conjunto si no está presente
+-- Agrega un elemento al conjunto (si no está presente)
 addSet :: (Eq a) => a -> Set a -> Set a
 addSet x s@(Set xs)
-  | x `inSet` s = s   -- Si ya está, devuelve el conjunto sin cambios
-  | otherwise   = Set (x:xs)  -- Lo agrega al frente
+    | inSet x s = s
+    | otherwise = Set (x:xs)
 
 -- Elimina un elemento del conjunto
 delSet :: (Eq a) => a -> Set a -> Set a
-delSet x (Set xs) = Set (filter (/= x) xs)
+delSet _ (Set []) = Set []
+delSet x (Set (y:ys))
+    | x == y    = Set ys
+    | otherwise = let (Set zs) = delSet x (Set ys) in Set (y:zs)
 
--- Une dos conjuntos sin duplicados
+-- Unión de dos conjuntos usando los métodos ya definidos
 unionSet :: (Eq a) => Set a -> Set a -> Set a
-unionSet (Set xs) (Set ys) = foldr addSet (Set xs) ys
+unionSet (Set []) s2 = s2
+unionSet (Set (x:xs)) s2 = unionSet (Set xs) (addSet x s2)
