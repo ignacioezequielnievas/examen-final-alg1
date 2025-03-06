@@ -49,3 +49,33 @@ preOrderTree (Nodo v izq der) = [v] ++ preOrderTree izq ++ preOrderTree der
 postOrderTree :: (Ord a) => ArbolBin a -> [a]
 postOrderTree Vacio = []
 postOrderTree (Nodo v izq der) = postOrderTree izq ++ postOrderTree der ++ [v]
+
+-- Eliminar el elemento con la clave más baja
+popLow :: (Ord a) => ArbolBin a -> ArbolBin a
+popLow Empty = Empty
+popLow (Nodo _ Empty der) = der  -- Si el mínimo está en la raíz, lo eliminamos
+popLow (Nodo x izq der) = Nodo x (popLow izq) der  -- Recursión hasta encontrar el mínimo
+
+-- Eliminar el elemento con la clave más alta
+popHigh :: (Ord a) => ArbolBin a -> ArbolBin a
+popHigh Empty = Empty
+popHigh (Nodo _  izq Empty ) = izq  -- Si el maximo está en la raíz, lo eliminamos
+popHigh (Nodo x izq der) = Nodo x izq  (popHigh der)  -- Recursión hasta encontrar el maximo
+
+
+
+-- Eliminar un elemento del conjunto (árbol binario)
+delTree :: (Ord a) => a -> ArbolBin a -> ArbolBin a
+delTree _ Empty = Empty  -- Caso base: árbol vacío, no hay nada que eliminar
+delTree x (Nodo v izq der)
+    | x < v     = Nodo v (delTree x izq) der  -- Buscar en el subárbol izquierdo
+    | x > v     = Nodo v izq (delTree x der)  -- Buscar en el subárbol derecho
+    | otherwise = eliminarNodo  (Nodo v izq der)  -- Nodo encontrado, hay que eliminarlo
+
+-- Función auxiliar para eliminar un nodo del árbol
+eliminarNodo :: (Ord a) => ArbolBin a -> ArbolBin a
+eliminarNodo (Nodo _ Empty der) = der  -- Si no hay hijo izquierdo, devolvemos el derecho
+eliminarNodo (Nodo _ izq Empty) = izq  -- Si no hay hijo derecho, devolvemos el izquierdo
+
+eliminarNodo (Nodo _ izq der)   = Nodo minValor izq (delTree minValor der)
+            where minValor = lowTree der  -- Reemplazar con el menor elemento del subárbol derecho
