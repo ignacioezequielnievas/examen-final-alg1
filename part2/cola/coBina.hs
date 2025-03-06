@@ -13,13 +13,15 @@ addpqr :: (Ord a) => a -> ColaPrioridad a -> ColaPrioridad a
 addpqr x Vacio = Nodo x Vacio Vacio
 addpqr x (Nodo y izq der)
     | x < y     = Nodo y (addpqr x izq) der  -- Insertar en el subárbol izquierdo
-    | otherwise = Nodo y izq (addpqr x der)  -- Insertar en el subárbol derecho
+    | x > y     = Nodo y izq (addpqr x der)  -- Insertar en el subárbol derecho
+    | otherwise = Nodo y izq der  -- Si es igual, no se inserta (evita duplicados)
+
 
 -- Obtener el elemento con la clave más baja (mínimo)
-nextpqr :: ColaPrioridad a -> Maybe a
-nextpqr Vacio = Nothing
-nextpqr (Nodo x Vacio _) = Just x  -- El nodo más a la izquierda tiene la clave más baja
-nextpqr (Nodo _ izq _) = nextpqr izq
+nextqpr :: (Ord a) => ColaPrioridad a -> a
+nextqpr Vacio = error "La cola de prioridad está vacía"
+nextqpr (Nodo x Vacio _) = x   -- El más a la izquierda es el mínimo
+nextqpr (Nodo _ izq _) = nextqpr izq  -- Buscar en el subárbol izquierdo
 
 -- Eliminar el elemento con la clave más baja
 poppqr :: (Ord a) => ColaPrioridad a -> ColaPrioridad a
