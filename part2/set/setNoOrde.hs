@@ -18,9 +18,9 @@ inSet x (Set (y:ys)) = x == y || inSet x (Set ys)
 
 -- Agrega un elemento al conjunto (si no está presente)
 addSet :: (Eq a) => a -> Set a -> Set a
-addSet x s@(Set xs)
-    | inSet x s = s
-    | otherwise = Set (x:xs)
+addSet e s@(Set xs)
+    | inSet e s = s
+    | otherwise = Set (e:xs)
 
 -- Elimina un elemento del conjunto
 delSet :: (Eq a) => a -> Set a -> Set a
@@ -32,4 +32,5 @@ delSet x (Set (y:ys))
 -- Unión de dos conjuntos usando los métodos ya definidos
 unionSet :: (Eq a) => Set a -> Set a -> Set a
 unionSet (Set []) s2 = s2
+unionSet  s1 (Set [])= s1
 unionSet (Set (x:xs)) s2 = unionSet (Set xs) (addSet x s2)
