@@ -53,4 +53,5 @@ minElemento (Nodo _ izq _)   = minElemento izq
 -- Unir dos conjuntos usando los métodos definidos
 unionSet :: (Ord a) => Set a -> Set a -> Set a
 unionSet Vacio s2 = s2
+unionSet s1 Vacio = s1
 unionSet (Nodo v izq der) s2 = addSet v (unionSet izq (unionSet der s2))

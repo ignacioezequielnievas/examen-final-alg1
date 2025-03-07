@@ -23,24 +23,24 @@ inSet x (S (y:ys))
 -- Insertar un elemento en un conjunto ordenado (manteniendo el orden y sin duplicados)
 addSet :: (Ord a) => a -> Set a -> Set a
 addSet x (S []) = S [x]
-addSet x (S ys@(y:ys'))
-    | x == y    = S ys  -- Si ya existe, no lo insertamos
-    | x < y     = S (x:ys)  -- Insertamos antes de `y` para mantener orden
-    | otherwise = let S zs = addSet x (S ys') in S (y:zs)
+addSet x (S b@(y:ys))
+    | x == y    = S b  -- Si ya existe, no lo insertamos
+    | x < y     = S (x:b)  -- Insertamos antes de `y` para mantener orden
+    | otherwise = let S zs = addSet x (S ys) in S (y:zs)
 
 -- Eliminar un elemento de un conjunto
 delSet :: (Ord a) => a -> Set a -> Set a
 delSet _ (S []) = S []
-delSet x (S (y:ys))
+delSet x (S b@(y:ys))
     | x == y    = S ys
-    | x < y     = S (y:ys)  -- Si `x` no está en el conjunto, lo dejamos igual
+    | x < y     = S  b  -- Si `x` no está en el conjunto, lo dejamos igual
     | otherwise = let S zs = delSet x (S ys) in S (y:zs)
 
 -- Unir dos conjuntos ordenados sin duplicados
 unionSet :: (Ord a) => Set a -> Set a -> Set a
 unionSet (S []) s2 = s2
 unionSet s1 (S []) = s1
-unionSet (S (x:xs)) (S (y:ys))
+unionSet (S a@(x:xs)) (S b@(y:ys))
     | x == y    = let S zs = unionSet (S xs) (S ys) in S (x:zs)
-    | x < y     = let S zs = unionSet (S xs) (S (y:ys)) in S (x:zs)
-    | otherwise = let S zs = unionSet (S (x:xs)) (S ys) in S (y:zs)
+    | x < y     = let S zs = unionSet (S xs) (S b) in S (x:zs)
+    | otherwise = let S zs = unionSet (S a) (S ys) in S (y:zs)
