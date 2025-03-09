@@ -14,7 +14,9 @@ setEmpty _ = False
 -- Verifica si un elemento está en el conjunto
 inSet :: (Eq a) => a -> Set a -> Bool
 inSet _ (Set []) = False
-inSet x (Set (y:ys)) = x == y || inSet x (Set ys)
+inSet x (Set (y:ys)) 
+                | x == y = True 
+                | otherwise = inSet x (Set ys)
 
 -- Agrega un elemento al conjunto (si no está presente)
 addSet :: (Eq a) => a -> Set a -> Set a

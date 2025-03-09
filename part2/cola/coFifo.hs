@@ -14,8 +14,8 @@ addqpr x (CP xs) = CP (insertarOrdenado x xs)
 -- Inserta un elemento en la posición correcta para mantener el orden
 insertarOrdenado :: (Ord a) => a -> [a] -> [a]
 insertarOrdenado x [] = [x]
-insertarOrdenado x (y:ys)
-  | x <= y    = x : y : ys
+insertarOrdenado x a@(y:ys)
+  | x <= y    = x :a
   | otherwise = y : insertarOrdenado x ys
 
 -- Devuelve el elemento con mayor prioridad (el menor en este caso)
