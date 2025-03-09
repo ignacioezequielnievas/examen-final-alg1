@@ -46,7 +46,8 @@ eliminarNodo (Nodo _ izq der)   = Nodo minValor izq (delSet minValor der)
     where minValor = minElemento der  -- Reemplazar con el menor elemento del subárbol derecho
 
 -- Función auxiliar para encontrar el mínimo elemento en un árbol
-minElemento :: Set a -> a
+minElemento ::(Ord a) => Set a -> a
+lowTreeSet Empty = error "arbol vacio"
 minElemento (Nodo v Vacio _) = v
 minElemento (Nodo _ izq _)   = minElemento izq
 
