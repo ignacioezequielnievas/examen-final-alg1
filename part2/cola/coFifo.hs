@@ -9,9 +9,11 @@ mkqpr = CP []
 -- Agrega un elemento manteniendo la lista ordenada (menor primero)
 addqpr :: (Ord a) => a -> ColaPrio a -> ColaPrio a
 addqpr x (CP []) = CP [x]  
-addqpr x (CP a@(y:ys))
-    | x <= y    = CP (x:a)  
-    | otherwise = let CP zs = addqpr x (CP ys) in CP (y:zs) 
+addqpr v (CP a@(x:xs))
+                  |v < x = CP (v:a)
+                  |v > x = let (CP zs) = addqpr v (CP xs)  in CP (x:zs)
+                  |otherwise = CP a
+
 
 -- Devuelve el elemento con mayor prioridad (el menor en este caso)
 nextqpr :: ColaPrio a -> a
@@ -20,5 +22,5 @@ nextqpr (CP (x:_)) = x
 
 -- Elimina el elemento con mayor prioridad
 popqpr :: ColaPrio a -> ColaPrio a
-popqpr (CP []) = error "Cola vacía"
+popqpr (CP [])= CP []
 popqpr (CP (_:xs)) = CP xs

@@ -20,6 +20,7 @@ inSet x (Set (y:ys))
 
 -- Agrega un elemento al conjunto (si no está presente)
 addSet :: (Eq a) => a -> Set a -> Set a
+addSet x (Set []) = Set [x]
 addSet e s@(Set xs)
     | inSet e s = s
     | otherwise = Set (e:xs)
