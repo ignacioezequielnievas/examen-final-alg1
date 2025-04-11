@@ -39,6 +39,27 @@ highTree Empty = error "La cola de prioridad está vacía"
 highTree (Nodo x _ Empty ) = x   -- El más a la derecho es el mínimo
 highTree (Nodo _ _ der) = highTree der -- Buscar en el subárbol derecho
 
+checkBST :: (Ord a) => ArbolBin a -> Bool
+checkBST Empty = True
+checkBST (Nodo x izq der) =
+    izqOk && derOk && checkBST izq && checkBST der
+  where
+    izqOk = case izq of
+              Empty -> True
+              _     -> highTree izq < x
+    derOk = case der of
+              Empty -> True
+              _     -> lowTree der > x
+
+checkBST' :: (Ord a) => ArbolBin a -> Bool
+checkBST' tree = isBST tree Nothing Nothing
+  where
+    isBST :: (Ord a) => ArbolBin a -> Maybe a -> Maybe a -> Bool
+    isBST Empty _ _ = True
+    isBST (Nodo x izq der) minVal maxVal =
+      dentroLimites && isBST izq minVal (Just x) && isBST der (Just x) maxVal
+      where
+        dentroLimites = maybe True (x >) minVal && maybe True (x <) maxVal
 
 -- Recorrido Preorden (raíz, izquierda, derecha)
 preOrderTree :: (Ord a) => ArbolBin a -> [a]
